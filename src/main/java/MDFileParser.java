@@ -69,6 +69,7 @@ public class MDFileParser {
     text = removeCurlyBracesContent(text);
     text = removeSquareBrackets(text);
     text = removeGraveAccent(text);
+    text = removeAngleBracketsContent(text);
     text = removeParenthesesWithoutContent(text);
     return text;
   }
@@ -106,6 +107,10 @@ public class MDFileParser {
 
   private String removeGraveAccent(String text) {
     return text.replaceAll("`", "");
+  }
+
+  private String removeAngleBracketsContent(String text) {
+    return text.replaceAll("<.*?>", "");
   }
 
   private String removeParenthesesWithoutContent(String text) {
