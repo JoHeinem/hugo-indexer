@@ -51,13 +51,65 @@ public class MDFileParser {
     String imgPath = extractPathOfFirstImage(body);
 
     MDFileContent fileContent = new MDFileContent();
-    fileContent.body = body;
+    fileContent.body = filterMDLanguage(body);
     fileContent.title = title;
     fileContent.fileName = file.getName();
     fileContent.computePathFromRootDir(rootDir, filePath);
     fileContent.computeImgPathFromRootDir(imgPath);
 
     return fileContent;
+  }
+
+  private String filterMDLanguage(String text) {
+    text = removeLineBreaks(text);
+    text = removeMultipleWhitespaces(text);
+    text = removeHashTags(text);
+    text = removeAsterisk(text);
+    text = removeCodeSamples(text);
+    text = removeCurlyBracesContent(text);
+    text = removeSquareBrackets(text);
+    text = removeGraveAccent(text);
+    text = removeParenthesesWithoutContent(text);
+    return text;
+  }
+
+  private String removeLineBreaks(String text) {
+    return text.replaceAll("[\\t\\n\\r]"," ");
+  }
+
+  private String removeMultipleWhitespaces(String text){
+    return text.trim().replaceAll(" +", " ");
+  }
+
+  private String removeHashTags(String text) {
+    return text.replaceAll("#", "");
+  }
+
+  private String removeAsterisk(String text) {
+    return text.replaceAll("\\*", "");
+  }
+
+  private String removeCodeSamples(String text) {
+    return text.replaceAll("```.*?```", "");
+  }
+
+  private String removeCurlyBracesContent(String text) {
+    text = text.replaceAll("\\{\\{\\{.*?\\}\\}\\}", "");
+    text = text.replaceAll("\\{\\{.*?\\}\\}", "");
+    text = text.replaceAll("\\{.*?\\}", "");
+    return text;
+  }
+
+  private String removeSquareBrackets(String text) {
+    return text.replaceAll("\\[|\\]", "");
+  }
+
+  private String removeGraveAccent(String text) {
+    return text.replaceAll("`", "");
+  }
+
+  private String removeParenthesesWithoutContent(String text) {
+    return text.replaceAll("\\( *\\)", "");
   }
 
   private String readFile(String path, Charset encoding) throws IOException {
