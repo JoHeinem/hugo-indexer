@@ -32,6 +32,10 @@ public class MDFileContent {
     this.pathFromRootDir = pathDiff;
   }
 
+//  public String ensureValidRootPath(String rootPath) {
+//    if(rootPath.endsWith("/"))
+//  }
+
   private String computePathDiff(String rootPath, String filePath) {
     String pathDiff = "";
     if (rootPath.length() > filePath.length()) {
@@ -45,7 +49,8 @@ public class MDFileContent {
   public void computeImgPathFromRootDir(String imgPath) {
     String imgPathFromRootDir = "";
     if(imgPath.startsWith("../")){
-      int idxFromLastPath = pathFromRootDir.lastIndexOf("/");
+      String relativePathWithoutLastSlash = pathFromRootDir.substring(0, pathFromRootDir.length()-1);
+      int idxFromLastPath = relativePathWithoutLastSlash.lastIndexOf("/");
       String relativeStart = pathFromRootDir.substring(0, idxFromLastPath);
       String imgPathReturnSkipped = imgPath.substring(2);
       imgPathFromRootDir = relativeStart + imgPathReturnSkipped;
